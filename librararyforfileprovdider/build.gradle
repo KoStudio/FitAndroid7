@@ -1,6 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'//添加
+//apply plugin: 'com.novoda.bintray-release'//添加
 
+apply plugin: 'maven-publish' /// 发布到Jitpack的配置
+
+/// 发布到Jitpack的配置
+task generateSourcesJar(type: Jar){
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
 
 android {
     compileSdkVersion 25
@@ -13,21 +20,35 @@ android {
         versionName "1.0"
     }
 
+    /// 发布到Jitpack的配置
+    afterEvaluate {
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release          // 表示发布 release（jitpack 都不会使用到）
+                    groupId = 'com.github.KoStudio'  // 依赖库的组id （jitpack 都不会使用到）
+                    artifactId = 'fileprovoder'       // 依赖库的名称 （jitpack 都不会使用到）
+                    version ="1.0.1"                 // 当前版本号（jitpack 都不会使用到）
+                }
+            }
+        }
+    }
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.android.support:appcompat-v7:25.3.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:25.3.1'
 }
 
-//添加
-publish {
-    userOrg = 'hongyangandroid'//bintray.com用户名
-    groupId = 'com.zhy.base'//jcenter上的路径
-    artifactId = 'fileprovider'//项目名称
-    publishVersion = '1.0.0'//版本号
-    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
-    website = 'https://github.com/hyman/basetools'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
-}
+////添加
+//publish {
+//    userOrg = 'hongyangandroid'//bintray.com用户名
+//    groupId = 'com.zhy.base'//jcenter上的路径
+//    artifactId = 'fileprovider'//项目名称
+//    publishVersion = '1.0.0'//版本号
+//    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
+//    website = 'https://github.com/hyman/basetools'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+//}
 
 // ./gradlew :librararyforfileprovdider:clean :librararyforfileprovdider:build bintrayUpload -PbintrayUser=hongyangandroid -PbintrayKey= -PdryRun=false
