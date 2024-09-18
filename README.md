@@ -10,7 +10,11 @@
 ## 使用
 
 ```
-compile 'com.zhy.base:fileprovider:1.0.0'
+~~compile 'com.zhy.base:fileprovider:1.0.0'~~
+
+maven { url "https://jitpack.io" } 
+
+implementation 'com.github.KoStudio:FitAndroid7:1.0.1'
 ```
 
 通过FileProvider7这个类完成uri的获取即可，例如：
